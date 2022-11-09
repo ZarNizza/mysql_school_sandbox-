@@ -63,7 +63,7 @@ BEGIN
   END IF;
 
   START TRANSACTION;
-  SELECT log_date, c.grade, c.symbol, l.time_slot, s.name, t.lastName, t.firstName, t.patronym, c.size, l.size FROM log AS l LEFT JOIN classes AS c ON l.class = c.id LEFT JOIN tutors AS t ON l.tutor = t.id LEFT JOIN subjects AS s ON l.subj = s.id WHERE l.log_date = log_date GROUP BY log_date, c.grade, c.symbol, l.time_slot, s.name, t.lastName, t.firstName, t.patronym, c.size, l.size ORDER BY c.grade, c.symbol, l.time_slot;
+  SELECT log_date, CONCAT(CAST(c.grade AS CHAR(2)), c.symbol) AS class, l.time_slot, s.name, t.lastName, t.firstName, t.patronym, c.size, l.size FROM log AS l LEFT JOIN classes AS c ON l.class = c.id LEFT JOIN tutors AS t ON l.tutor = t.id LEFT JOIN subjects AS s ON l.subj = s.id WHERE l.log_date = log_date GROUP BY log_date, c.grade, c.symbol, l.time_slot, s.name, t.lastName, t.firstName, t.patronym, c.size, l.size ORDER BY c.grade, c.symbol, l.time_slot;
   COMMIT;
 END
 //
