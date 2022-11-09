@@ -1,3 +1,5 @@
+# создаём таблицы
+#
 
 CREATE TABLE IF NOT EXISTS subjects (id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, grade SMALLINT DEFAULT 0, name VARCHAR(20) DEFAULT "");
 CREATE TABLE IF NOT EXISTS classes (id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, grade SMALLINT DEFAULT 0, symbol VARCHAR(1) DEFAULT "", chief INT DEFAULT 0, size SMALLINT DEFAULT 0);
@@ -5,6 +7,53 @@ CREATE TABLE IF NOT EXISTS tutors (id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMA
 CREATE TABLE IF NOT EXISTS log (id SERIAL PRIMARY KEY, log_date DATE DEFAULT (CURDATE()), time_slot SMALLINT DEFAULT 0, class SMALLINT DEFAULT 0, subj SMALLINT DEFAULT 0, tutor SMALLINT DEFAULT 0, size SMALLINT DEFAULT 0);
 
 
+
+# тестовый набор заранее определённых данных для проверки алгоритмов вводим вручную
+# далее есть вариант обильного наполнения случайными данными
+
+INSERT INTO classes (grade, symbol, chief, size) VALUES (1, "А", 1, 20);
+INSERT INTO classes (grade, symbol, chief, size) VALUES (1, "Б", 2, 20);
+
+INSERT INTO subjects (grade, name) VALUES (1, "Химия");
+INSERT INTO subjects (grade, name) VALUES (1, "Физика");
+
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Рыбников", "Иннокентий", "Петрович");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Линдгрен", "Фрекен", "Бок");
+
+INSERT INTO log (time_slot, class, subj, tutor, size) VALUES (1, 1, 1, 1, 15);
+INSERT INTO log (time_slot, class, subj, tutor, size) VALUES (1, 1, 1, 2, 5);
+INSERT INTO log (time_slot, class, subj, tutor, size) VALUES (1, 1, 1, 1, 15);
+INSERT INTO log (time_slot, class, subj, tutor, size) VALUES (1, 1, 1, 2, 5);
+INSERT INTO log (time_slot, class, subj, tutor, size) VALUES (1, 1, 1, 1, 15);
+INSERT INTO log (time_slot, class, subj, tutor, size) VALUES (1, 1, 1, 2, 10);
+INSERT INTO log (time_slot, class, subj, tutor, size) VALUES (1, 1, 2, 1, 10);
+INSERT INTO log (time_slot, class, subj, tutor, size) VALUES (1, 1, 2, 2, 20);
+INSERT INTO log (time_slot, class, subj, tutor, size) VALUES (1, 1, 2, 1, 10);
+INSERT INTO log (time_slot, class, subj, tutor, size) VALUES (1, 1, 2, 2, 20);
+INSERT INTO log (time_slot, class, subj, tutor, size) VALUES (1, 1, 2, 1, 10);
+INSERT INTO log (time_slot, class, subj, tutor, size) VALUES (1, 1, 2, 2, 20);
+
+# ожидаемый результат посещаемости по учителям:
+# 1 (Рыбников Иннокентий Петрович) - 62,5%
+# 2 (Линдгрен Фрекен Бок) - 66,7%
+
+# ожидаемый результат посещаемости по предметам:
+# 1 (Химия) - 54,2%
+# 2 (Физика) - 75,0%
+
+# ожидаемый результат посещаемости по синтетическому критерию Учитель/Предмет:
+# 1/1 (Химия/Рыбников) - 75%
+# 1/2 (Физика/Рыбников) - 50%
+# 2/1 (Химия/Линдгрен) - 33%
+# 2/2 (Физика/Линдгрен) - 100%
+
+# см. скриншоты результатов на этом объёме данных
+
+
+
+# вариант с большими наборами данных
+#
+#
 # наполняем таблицу subjects
 #
 INSERT INTO subjects (grade, name) VALUES (1, "Сказки");
@@ -28,7 +77,7 @@ INSERT INTO subjects (grade, name) VALUES (6, "ФизКультура");
 
 
 # наполняем таблицу classes
-# 33 класса (с 1го по 11й, по 3 в параллели), в каждом классе от 15 до 25 учеников
+# 33 класса (с 1го по 11й, по 3 в параллели), в каждом классе от 10 до 25 учеников
 # вручную заполнять лень — пишем процедуру
 #
 DROP PROCEDURE IF EXISTS fill_class;
@@ -65,36 +114,37 @@ INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Жиакомо", "Ж
 INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Бальзамо", "Джузеппе", "Петрович");
 INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Киврин", "Фёдор", "Симеонович");
 INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Хунта", "Кристобаль", "Хозевич");
-INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндекс", "Анна", "Борисовна");
-INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндекс", "Борислава", "Витальевна");
-INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндекс", "Валентина", "Геннадьевна");
-INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндекс", "Галина", "Демьяновна");
-INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндекс", "Дарья", "Евгеньевна");
-INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндекс", "Евгения", "Жиановна");
-INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндекс", "Жанна", "Зиновьевна");
-INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндекс", "Зейнаб", "Ибрагимовна");
-INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндекс", "Илона", "Йоновна");
-INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндекс", "Йожи", "Кальмановна");
-INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндекс", "Катрин", "Лемовна");
-INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндекс", "Лайма", "Максимовна");
-INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндекс", "Мария", "Николаевна");
-INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндекс", "Нинель", "Онуфриевна");
-INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндекс", "Оксана", "Порфирьевна");
-INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндекс", "Павел", "Романович");
-INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндекс", "Роксана", "Станиславовна");
-INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндекс", "Сильвестр", "Сталлонович");
-INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндекс", "Светлана", "Тарасовна");
-INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндекс", "Терентий", "Ульянович");
-INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндекс", "Уфим", "Фёдорович");
-INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндекс", "Фаддей", "Харитонович");
-INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндекс", "Хельга", "Церберовна");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндексон", "Анна", "Борисовна");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндексон", "Борислава", "Витальевна");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндексон", "Валентина", "Геннадьевна");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндексон", "Галина", "Демьяновна");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндексон", "Дарья", "Евгеньевна");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндексон", "Евгения", "Жиановна");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндексон", "Жанна", "Зиновьевна");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндексон", "Зейнаб", "Ибрагимовна");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндексон", "Илона", "Йоновна");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндексон", "Йожи", "Кальмановна");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндексон", "Катрин", "Лемовна");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндексон", "Лайма", "Максимовна");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндексон", "Мария", "Николаевна");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндексон", "Нинель", "Онуфриевна");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндексон", "Оксана", "Порфирьевна");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндексон", "Павел", "Романович");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндексон", "Роксана", "Станиславовна");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндексон", "Сильвестр", "Сталлонович");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндексон", "Светлана", "Тарасовна");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндексон", "Терентий", "Ульянович");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндексон", "Уфим", "Фёдорович");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндексон", "Фаддей", "Харитонович");
+INSERT INTO tutors (lastName, firstName, patronym) VALUES ("Яндексон", "Хельга", "Церберовна");
 
 
 # наполняем таблицу log
-# пишем процедуру:
-# сегодня и 10 дней в прошлое,
-# у каждого класса 5 уроков в день,
-# предметы и учителя задаются случайно, для наших целей реалистичность не важна
+
+# для большого набора данных пишем процедуру fill_log:
+#  - сегодня и 10 дней в прошлое,
+#  - у каждого класса 5 уроков в день,
+#  - предметы и учителя задаются случайно, первому классу может выпасть урок для 11го, но для наших целей реалистичность не так важна
 #
 DROP PROCEDURE IF EXISTS fill_log;
 DELIMITER //
@@ -113,7 +163,7 @@ BEGIN
     WHILE log_date <= curr_date DO
         WHILE time_slot <= 5 DO
             WHILE class <= 33 DO
-                INSERT INTO log (log_date, time_slot, class, subj, tutor, size) VALUES (log_date, time_slot, class, ROUND(RAND()*subj_num), ROUND(RAND()*tutor_num), ROUND(RAND()*(SELECT size FROM classes WHERE id = class)));
+                INSERT INTO log (log_date, time_slot, class, subj, tutor, size) VALUES (log_date, time_slot, class, ROUND(1 + RAND() * (subj_num - 1)), ROUND(1 + RAND() * (tutor_num - 1)), ROUND(RAND() * (SELECT size FROM classes WHERE id = class)));
                 SET class = class + 1;
             END WHILE;
             SET class = 1;
