@@ -19,6 +19,7 @@ DELIMITER ;
 CALL count_lessons_by_Teacher(1);
 
 
+
 # -Учителя, которые не работали за дату (Учитель)
 #
 DROP PROCEDURE IF EXISTS count_idle_Teachers;
@@ -52,4 +53,41 @@ CALL count_idle_Teachers(1);
 
 
 # -Отчет за дату (Класс, Предмет, Учитель, Всего детей в классе(сколько должно быть), Всего детей на уроке (сколько пришло))
+
+DROP PROCEDURE IF EXISTS count_Pupils_attendance;
+DELIMITER //
+CREATE PROCEDURE count_Pupils_attendance(delta INT)	# parameter keep an offset from current date
+BEGIN
+  DECLARE log_date DATE DEFAULT (CURDATE());   # отчётная дата, 1 === "вчера"
+  IF delta > 0 THEN SET log_date = SUBDATE(CURDATE(), delta);
+  END IF;
+
+  START TRANSACTION;
+  SELECT log_date, c.grade, c.symbol, l.time_slot, s.name, t.lastName, t.firstName, t.patronym, c.size, l.size FROM log AS l LEFT JOIN classes AS c ON l.class = c.id LEFT JOIN tutors AS t ON l.tutor = t.id LEFT JOIN subjects AS s ON l.subj = s.id WHERE l.log_date = log_date GROUP BY log_date, c.grade, c.symbol, l.time_slot, s.name, t.lastName, t.firstName, t.patronym, c.size, l.size ORDER BY c.grade, c.symbol, l.time_slot;
+  COMMIT;
+END
+//
+DELIMITER ;
+
+CALL count_Pupils_attendance(1);
+
+
 # -Учитель и предмет за месяц, с наименьшей посещаемостью (процент от общего кол-ва. нужно найти запись с минимальным процентом).
+
+DROP PROCEDURE IF EXISTS count_denied;
+DELIMITER //
+CREATE PROCEDURE count_denied(delta INT)	# parameter keep an offset from current date
+BEGIN
+  DECLARE log_date DATE DEFAULT (CURDATE());   # отчётная дата, 1 === "вчера"
+  IF delta > 0 THEN SET log_date = SUBDATE(CURDATE(), delta);
+  END IF;
+
+  START TRANSACTION;
+#  SELECT log_date, c.grade, c.symbol, l.time_slot, s.name, t.lastName, t.firstName, t.patronym, c.size, l.size FROM log AS l LEFT JOIN classes AS c ON l.class = c.id LEFT JOIN tutors AS t ON l.tutor = t.id LEFT JOIN subjects AS s ON l.subj = s.id WHERE l.log_date = log_date GROUP BY log_date, c.grade, c.symbol, l.time_slot, s.name, t.lastName, t.firstName, t.patronym, c.size, l.size ORDER BY c.grade, c.symbol, l.time_slot;
+  COMMIT;
+END
+//
+DELIMITER ;
+
+CALL count_denied(1);
+
